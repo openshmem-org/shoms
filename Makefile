@@ -16,13 +16,19 @@
 #   For more information please contact the SHOMS developers at:
 #   bakermb@ornl.gov
 
+SHMEM12 = 1
+
 OSHCC=oshcc
 OSHLD=$(OSHCC)
 CC=gcc
 CPPFLAGS=-Isrc/include/ #-DDEBUG #-DNDEBUG
-CFLAGS=-ggdb -std=c99 -Os -Wall
+CFLAGS=-g -std=c99 -Os -Wall
 
 OBJECTS=src/main.o src/test_list.o src/tests.o src/orbtimer.o src/process_parameters.o
+
+ifneq ($(SHMEM12), 0)
+	CFLAGS += -DUSE_SHMEM12
+endif
 
 .c.o:
 	$(OSHCC) -c $(CPPFLAGS) $(CFLAGS) $(OSHFLAGS) -o $@ $<

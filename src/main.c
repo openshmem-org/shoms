@@ -439,9 +439,21 @@ int main(int argc, char **argv){
   parsed_options_t input_parameters;
   comm_t *shmem_system = NULL;
 
+#ifdef USE_SHMEM12
+  shmem_init();
+#else
   start_pes(0);
+#endif
   global_npes = shmem_n_pes();
   global_my_pe = shmem_my_pe();
+
+#ifdef USE_SHMEM12
+  int major_version = 1, minor_version = 1;
+  shmem_info_get_version(&major_version, &minor_version);
+  printf("Using OpenSHMEM version %i.%i\n", major_version, minor_version);
+#else
+  printf("using OpenSHMEM version 1.1 or earlier\n");
+#endif
 
   wait_for_debugger();
 
@@ -454,8 +466,6 @@ int main(int argc, char **argv){
     probe_system(shmem_system);
   }
 
-  //shmem_barrier_all();
-
   if(input_parameters.affinity_test == 0){
     if(MY_PE == 0){
       fprintf(input_parameters.output_file, "Running tests\n");
@@ -467,6 +477,10 @@ int main(int argc, char **argv){
     }
     run_affinity_tests(test_list, test_length, iterations, iterations_length, &input_parameters, shmem_system);
   }
+
+#ifdef USE_SHMEM12
+  shmem_finalize();
+#endif
 
   return 0;
 }

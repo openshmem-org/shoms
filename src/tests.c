@@ -1420,3 +1420,25 @@ index_t test_shmem_test_lock(index_t test_start, index_t test_size, void *buffer
   *bytes_transfered = 0;
   return lock;
 }
+
+#ifdef USE_SHMEM12
+
+index_t test_shmem_init(index_t test_start, index_t test_size, void *buffers, index_t *bytes_transfered){
+  shmem_init();
+  return 0;
+}
+
+void init_per_iteration_shmem_init(void **buffer, index_t size){
+  shmem_finalize();
+}
+
+index_t test_shmem_finalize(index_t test_start, index_t test_size, void *buffers, index_t *bytes_transfered){
+  shmem_finalize();
+  return 0;
+}
+
+void cleanup_per_iteration_shmem_finalize(void *buffer){
+  shmem_init();
+}
+
+#endif

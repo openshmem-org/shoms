@@ -40,8 +40,8 @@ extern int global_my_pe;
 #define N_PES (global_npes)
 #define MY_PE (global_my_pe)
 
-#define NUM_TESTS ((index_t)126)
-#define MAX_TESTS ((index_t)126)
+#define NUM_TESTS ((index_t)128)
+#define MAX_TESTS ((index_t)128)
 
 void init_tests();
 index_t all_tests(test_t **tests_array);
@@ -155,3 +155,10 @@ declare_test(shfree);
 declare_test(shmem_set_lock);
 declare_test(shmem_clear_lock);
 declare_test(shmem_test_lock);
+
+#ifdef USE_SHMEM12
+declare_test(shmem_init);
+declare_test(shmem_finalize);
+
+
+#endif
